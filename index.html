@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orca Shield Enablement — Nov 19, 2026</title>
+<style>
+  :root{
+    --ink:#111;
+    --muted:#555;
+    --line:#ddd;
+    --accent:#0a66c2;
+    --accent2:#e8f0fa;
+    --ok:#0a7d33;
+    --bad:#b3261e;
+    --bg:#fff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  header.hero{background:#fff;border-bottom:3px solid #111;padding:34px 0 26px}
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h1{font-size:34px;line-height:1.15;margin:8px 0 6px;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:17px;margin:0 0 16px}
+  .badge{display:inline-block;border:1px solid var(--line);border-radius:20px;padding:3px 12px;font-size:12.5px;color:var(--muted);background:#fafafa;margin-right:6px}
+  .badge.build{background:#111;color:#fff;border-color:#111}
+  nav.tabs{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+  nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto}
+  nav.tabs button{background:none;border:none;border-bottom:3px solid transparent;padding:12px 14px 10px;font-size:14.5px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+  nav.tabs button.active{color:var(--ink);border-bottom-color:#111}
+  section.tab{display:none;padding:28px 0 60px}
+  section.tab.active{display:block}
+  h2{font-size:24px;margin:0 0 4px;letter-spacing:-.01em}
+  h3{font-size:18px;margin:26px 0 8px}
+  .lede{color:var(--muted);margin:0 0 18px;font-size:15.5px}
+  .card{border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0;background:#fff}
+  .card.dark{background:#111;color:#fff;border-color:#111}
+  .card.dark .muted{color:#bbb}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:16px 0}
+  .stat{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#fff}
+  .stat b{display:block;font-size:24px;letter-spacing:-.01em}
+  .stat span{color:var(--muted);font-size:13px;line-height:1.35}
+  .step{border-left:3px solid var(--accent);padding:2px 0 2px 14px;margin:12px 0}
+  .step b{font-size:15.5px}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:#fafafa;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  code{background:#f4f4f4;border:1px solid var(--line);border-radius:4px;padding:1px 6px;font-size:13.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  pre{background:#111;color:#eee;border-radius:10px;padding:14px 16px;overflow-x:auto;font-size:13px;line-height:1.5}
+  pre code{background:none;border:none;color:inherit;padding:0}
+  ul,ol{margin:8px 0 8px 22px;padding:0}
+  li{margin:5px 0}
+  .tag{display:inline-block;background:var(--accent2);color:var(--accent);font-size:12px;font-weight:700;border-radius:4px;padding:2px 8px;margin-right:6px}
+  .tag.new{background:#0a7d33;color:#fff}
+  .obj{border:1px solid var(--line);border-left:3px solid var(--bad);border-radius:8px;padding:12px 16px;margin:12px 0}
+  .obj b{display:block;margin-bottom:4px}
+  .obj .ans{color:var(--muted);font-size:14.5px}
+  .obj .ans b{color:var(--ink);display:inline}
+  .quizq{border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0}
+  .quizq p{margin:0 0 8px;font-weight:600}
+  .quizq label{display:block;padding:4px 0;font-weight:400}
+  .quizq input{margin-right:8px}
+  .result{font-weight:700;margin-top:8px;min-height:22px}
+  .result.ok{color:var(--ok)}
+  .result.no{color:var(--bad)}
+  footer{border-top:1px solid var(--line);padding:22px 0 40px;color:var(--muted);font-size:13.5px}
+  footer a{color:var(--accent);text-decoration:none}
+  .note{font-size:13.5px;color:var(--muted);border:1px dashed var(--line);border-radius:8px;padding:10px 14px;margin:12px 0;background:#fafafa}
+  .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .pill{border:1px solid var(--line);border-radius:20px;padding:5px 14px;font-size:13.5px;background:#fff;color:var(--ink)}
+  .pill b{color:var(--accent)}
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:720px){.twocol{grid-template-columns:1fr}}
+  .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+  @media (max-width:720px){.flow{grid-template-columns:1fr 1fr}}
+  .flow .f{border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-align:center;background:#fff}
+  .flow .f b{display:block;font-size:16px;margin-bottom:4px}
+  .flow .f span{font-size:12.5px;color:var(--muted);line-height:1.4;display:block}
+  .flow .f .n{display:inline-block;background:var(--accent);color:#fff;border-radius:50%;width:22px;height:22px;line-height:22px;font-size:12px;font-weight:700;margin-bottom:6px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Sales Enablement Session</div>
+    <h1>Orca Shield: training today, selling this week</h1>
+    <p class="sub">Messaging recap from the last two weeks, this week's product updates, and the Orca Shield deep dive. Shield is the main event.</p>
+    <div>
+      <span class="badge build">Build date: 2026-11-19</span>
+      <span class="badge">Session: Nov 19, 2026</span>
+      <span class="badge">Reps: all OrcaRouter AE / SDR</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap">
+    <button id="nav-agenda" class="active" onclick="showShieldTab('agenda')">Agenda</button>
+    <button id="nav-messaging" onclick="showShieldTab('messaging')">Messaging recap</button>
+    <button id="nav-updates" onclick="showShieldTab('updates')">This week's updates</button>
+    <button id="nav-shield" onclick="showShieldTab('shield')">Orca Shield deep dive</button>
+    <button id="nav-quiz" onclick="showShieldTab('quiz')">Quiz</button>
+    <button id="nav-sources" onclick="showShieldTab('sources')">Sources</button>
+  </div>
+</nav>
+
+<section class="tab active" id="tab-agenda">
+  <div class="wrap">
+    <h2>Agenda</h2>
+    <p class="lede">One session, three blocks. The first two move fast, the third is where we stay.</p>
+
+    <div class="card">
+      <div class="pillrow">
+        <span class="pill"><b>Block 1 · 15 min</b> Messaging training recap</span>
+        <span class="pill"><b>Block 2 · 15 min</b> Product updates this week</span>
+        <span class="pill"><b>Block 3 · 45 min</b> Orca Shield deep dive</span>
+      </div>
+      <p style="margin:8px 0 0"><b>Outcome:</b> every rep can do the Shield pitch cold, place it in the stack without confusing it with Guardrails or the Firewall, and run the Watch-first conversation with a security buyer. Quiz at the end gates nothing, but nobody leaves until they can explain when Shield blocks and what a hint alone can and cannot do.</p>
+    </div>
+
+    <h3>Block 1 — Messaging recap</h3>
+    <ul>
+      <li>The standard: comment-first, two-line DMs, one open question, tier CTA, humanizer pass, no em dashes.</li>
+      <li>Yi's rule: short, name the model and its offensive capabilities, include evals, say it plugs into any harness or agent. Own the model, never "according to the manufacturer".</li>
+      <li>Fluff-to-Fact: stop selling products, start solving math problems.</li>
+      <li>Personas: open with what the buyer is measured on. Six lines, one per persona.</li>
+      <li>Grader loop: context plus draft through SuperAgent, then ship only the rewrite you would sign.</li>
+    </ul>
+
+    <h3>Block 2 — Product updates</h3>
+    <ul>
+      <li>OrcaC2 1.0 is live: decision model, $0.001 per call, ZDR by default, exclusive to OrcaRouter.</li>
+      <li>GPT-6.2 Sol and Astra Pro shipped; rate cards unchanged on Sol, token burn down ~40%.</li>
+      <li>Gemini 4 Carbon callable now at $2/$10, doubles to $4/$20 on Dec 1.</li>
+      <li>Claude Fable 5.2, Kimi K3.1 Pro, MiniMax M3.1 Flash new in catalog.</li>
+      <li>FlashLabs Week 44: FlashAI Post-Call Table, FlashRev Sequences performance.</li>
+    </ul>
+
+    <h3>Block 3 — Orca Shield</h3>
+    <ul>
+      <li>What it is and the threat it answers: attack agents, not malware.</li>
+      <li>The deception layer: Lure, Misdirect, Trap, Block.</li>
+      <li>The rollout: Watch first, decoys at the edge, full protection.</li>
+      <li>Where it lives in the console and how it composes with Guardrails and the Firewall.</li>
+      <li>Claim hygiene: what we can and cannot promise, in our own words.</li>
+      <li>Objections and the 10-minute demo flow.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="tab" id="tab-messaging">
+  <div class="wrap">
+    <h2>Messaging training recap</h2>
+    <p class="lede">Everything we drilled in the last two weeks, compressed to the rules that change reply rates.</p>
+
+    <div class="card dark">
+      <h3 style="color:#fff;margin-top:0">The standard, in one breath</h3>
+      <p style="margin:0">Comment on their work first. Two-line DM. One open question they can answer cheaply. CTA at the tier that fits. Humanizer pass before send: no em dashes, no AI tells, varied rhythm. The product enters only after a signal. Never pitch-slap an inbox.</p>
+    </div>
+
+    <h3>Yi's messaging rule (2026-10-21)</h3>
+    <div class="card">
+      <ul>
+        <li><b>Keep it short.</b> One idea, three lines max.</li>
+        <li><b>Focus on the model and its offensive capabilities.</b> What it does, not what it is.</li>
+        <li><b>Include the evals.</b> Numbers front-loaded.</li>
+        <li><b>Say it plugs into any harness or agent.</b> That is the integration story buyers check.</li>
+        <li><b>Own the model.</b> "We built", "we tasked it", "we scored". Never "according to the manufacturer".</li>
+        <li><b>No AI slop.</b> No "delve", no "landscape", no "I hope this finds you well".</li>
+        <li><b>Match the X voice.</b> Evidence first, numbers front-loaded, punchy.</li>
+      </ul>
+    </div>
+
+    <h3>Fluff-to-Fact</h3>
+    <div class="card">
+      <p style="margin:0"><b>Stop selling products. Start solving math problems.</b> Every message should carry at least one concrete number the buyer can verify: price per million tokens, a benchmark score, a latency figure, a context window. Fluff is a claim without a number. Fact is a claim with one attached.</p>
+    </div>
+
+    <h3>Personas: lead with what they are measured on</h3>
+    <div class="card">
+      <table>
+        <tr><th>Persona</th><th>Hook</th><th>Opening line</th></tr>
+        <tr><td>FinOps</td><td>Zero markup, per-call receipt</td><td>"What does a request cost you today?"</td></tr>
+        <tr><td>Platform</td><td>One endpoint, failovers, sub-1ms routing</td><td>"What happens mid-sprint when a provider throttles?"</td></tr>
+        <tr><td>Security</td><td>Zero retention, scoped keys, signed evidence</td><td>"What does your reviewer need to see?"</td></tr>
+        <tr><td>AI product</td><td>Named routers, prompt registry</td><td>"How often do you swap models, and what does it cost?"</td></tr>
+        <tr><td>Agent builders</td><td>Firewall: tools graded before they run</td><td>"What stops your agent doing something you would not approve?"</td></tr>
+        <tr><td>Inference platforms</td><td>Pass-through, cache, failover, transparency</td><td>"How does your scoring read our failovers?"</td></tr>
+      </table>
+    </div>
+
+    <h3>Coaching takeaways (1:1 series, Oct 23-26)</h3>
+    <div class="twocol">
+      <div class="card">
+        <b>Kathy</b>
+        <p style="margin:6px 0 0">Friendly tone works. Typos kill it: proofread twice. "King of cyber models" is fluff, name what the model does. Every message needs the model, the capabilities, the evals, and the harness line.</p>
+      </div>
+      <div class="card">
+        <b>Rayyan</b>
+        <p style="margin:6px 0 0">Best discovery openers on the board, keep them. Say "we built", not "according to the manufacturer". Lead with API access, get the $3 vs $25 math in early, stay short.</p>
+      </div>
+      <div class="card">
+        <b>Ifrah</b>
+        <p style="margin:6px 0 0">Reputation triggers are your strength: CREST, ANAB, "evidence-driven". Open with the strongest credential, vary the "not a replacement" line, compress the bullet list into one hard sentence.</p>
+      </div>
+      <div class="card">
+        <b>Anna</b>
+        <p style="margin:6px 0 0">Trigger-based work is the best on the board: you read their post, found the sharpest claim, asked a real question. Keep doing exactly that at higher volume.</p>
+      </div>
+    </div>
+
+    <h3>Claim hygiene (never graduates)</h3>
+    <div class="note">
+      Prices are public on the live pages, quote them live. Benchmarks are ours: "our reported numbers, not an independent audit". No unverified dollar promises, no "genuinely unrestricted" phrasing (the safety floor stays on), no testimonials we cannot trace. When a number moves, the page moves first.
+    </div>
+  </div>
+</section>
+
+<section class="tab" id="tab-updates">
+  <div class="wrap">
+    <h2>Product updates this week</h2>
+    <p class="lede">OrcaRouter shipping hard, FlashLabs Week 44 out. Dates are real, numbers trace to the source pages in the Sources tab.</p>
+
+    <h3>OrcaRouter</h3>
+
+    <div class="card">
+      <span class="tag new">NEW · Nov 9</span><b style="font-size:17px">OrcaC2 1.0 — the decision model</b>
+      <p style="margin:6px 0 0">Decision-first language-vision model. Give it a state plus typed questions, get calibrated verdicts with probability and confidence in one pass. Built for blockchain security, MDR, incident response, security reasoning, security operations. Native temporal awareness across event sequences, vision input, 1M context. <b>$0.001 per call</b>, ZDR on by default, exclusive to OrcaRouter, served via POST /v1/systemone.</p>
+      <p style="margin:8px 0 0"><b>Benchmarks (ours):</b> 90.6 on vulnerability severity assessment, 87.3% overall blockchain security accuracy across 17 benchmarks.</p>
+      <p style="margin:8px 0 0"><b>Sales angle:</b> a new conversation with security decision-makers who already run models in-house. It is the radar layer, not another chatbot: machine-readable verdicts, priced per call.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag new">NEW · Nov 17</span><b style="font-size:17px">GPT-6.2 Sol and Astra Pro shipped</b>
+      <p style="margin:6px 0 0">Rate card unchanged at $2/$10 for Sol, but token burn dropped ~40%: GPT-6.2 Sol Pro finishes an index task on ~40k output tokens where 6.1 Sol Pro spent ~68k, so the bill falls ~20%. Astra Pro is the heavy tier at $8/$40. One migration note to know: 6.2 Sol rejects <code>reasoning_effort none</code>, the old 6 Sol accepted it.</p>
+      <p style="margin:8px 0 0"><b>Sales angle:</b> model-ops buyers compare cost per task, not per token. This week's blog covers the whole family; point at it and let the math do the work.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag new">NEW · Nov 10</span><b style="font-size:17px">Gemini 4 Carbon is callable, price doubles Dec 1</b>
+      <p style="margin:6px 0 0">Callable now at $2/$10 per 1M tokens. On Dec 1 that becomes $4/$20. 1M context, multimodal, native tool use, ZDR available.</p>
+      <p style="margin:8px 0 0"><b>Sales angle:</b> a dated price advantage. Anyone who needs Carbon has a reason to move before Dec 1; that is a closeable conversation this week.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag new">NEW in catalog</span><b style="font-size:17px">Claude Fable 5.2, Kimi K3.1 Pro, MiniMax M3.1 Flash</b>
+      <p style="margin:6px 0 0">Fable 5.2 is Anthropic's most capable widely released model, successor to Fable 5.1 at a lower price: $8/$40, 1M context as default, up to 128K output, thinking always on with private chain of thought. Kimi K3.1 Pro at $2/$10. MiniMax M3.1 Flash at $0.15/$0.60 for high-volume work.</p>
+      <p style="margin:8px 0 0"><b>Sales angle:</b> the zero-markup story in one line: 200+ models, one endpoint, provider price, no middleman. New flags on the models page are the freshest proof.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag">Nov 5 · Cyber</span><b style="font-size:17px">OrcaCyber K3.1 Pro Abliterated / Uncensored</b>
+      <p style="margin:6px 0 0">Drop-in Kimi K3.1 Pro for offensive security work: $4/$20 per 1M, p50 5477ms via OrcaRouter, cyber tier gating applies. Access-gated to the Security Research tier like the rest of the cyber line.</p>
+    </div>
+
+    <h3>FlashLabs — Week 44 (Nov 8)</h3>
+
+    <div class="card">
+      <b style="font-size:17px">FlashAI: Post-Call Table</b>
+      <p style="margin:6px 0 0">Call Logs now carries a follow-up table. After each call the AI decides whether follow-up is needed and writes a one-line summary, quoting the caller's own words as evidence. Your team assigns owner, due date, and next action (call back, SMS, redial, escalate) in the same table. Overdue items tag red. Bulk actions push contacts straight into a FlashRev List or FlashAI Campaign. Both inbound and outbound covered.</p>
+      <p style="margin:8px 0 0"><b>Sales angle (MCA/SBA):</b> "the AI promised a callback and nobody tracked it" is a story every funding shop has lived. This closes the loop from call outcome to human action with evidence.</p>
+    </div>
+
+    <div class="card">
+      <b style="font-size:17px">FlashRev: Sequences performance + reliability</b>
+      <p style="margin:6px 0 0">Sequence pages load faster (stats fetched only for channels actually used), failed stats show "--" with a Retry instead of a misleading 0, the Resume flow is safer (Cancel really cancels, repeated clicks blocked), and data access is locked to the current organization.</p>
+      <p style="margin:8px 0 0"><b>Sales angle:</b> trust in the numbers. "A 0 you can't trust is worse than a dash" lands with revenue ops buyers.</p>
+    </div>
+
+    <h3>What it means for the team</h3>
+    <div class="card">
+      <ul>
+        <li><b>OrcaC2</b> opens the Orca API conversation: decision outputs, not chat. Sell it to security ops and blockchain teams.</li>
+        <li><b>Carbon's Dec 1 doubling</b> is this week's urgency lever for model buyers.</li>
+        <li><b>GPT-6.2 Sol</b> is the cost-per-task story for FinOps personas.</li>
+        <li><b>Post-Call Table</b> is the MCA/SBA follow-up story, demo it in the FlashAI motion.</li>
+        <li><b>Shield</b> (next block) is the blue-team site defense conversation nobody else at this price point is having.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="tab" id="tab-shield">
+  <div class="wrap">
+    <h2>Orca Shield deep dive</h2>
+    <p class="lede">The main event. Read this twice before the session: once for the story, once for the honesty rules at the bottom.</p>
+
+    <div class="card dark">
+      <h3 style="color:#fff;margin-top:0">The 30-second pitch</h3>
+      <p style="margin:0">"AI agents are attacking websites now, not just scanning them. Most defenses try to spot the agent and block it. Shield flips that: it lures attack agents into decoys, feeds them synthetic files and credentials, and blocks the ones that bite. Every step an agent spends in a decoy is a step it does not spend on your real app. You start in Watch mode: one async tag, about two minutes, nothing blocked, and you can see which AI agents are already scouting your site. Included on eligible Team and Enterprise plans."</p>
+    </div>
+
+    <h3>What Shield is</h3>
+    <div class="card">
+      <p style="margin:0"><b>AI-native defense against attack agents.</b> A deception layer for websites. It does not try to fingerprint an attacker's tooling. It plants lures only a probing agent goes looking for, serves synthetic files and dependencies so the agent maps an app that is not yours, traps it in an isolated decoy session walled off from real users, and blocks hard when it uses a decoy credential. Connect your WAF and a followed lead blocks the agent's IP at your edge too.</p>
+    </div>
+
+    <h3>The threat it answers</h3>
+    <div class="grid">
+      <div class="stat"><b>Browser agents</b><span>Automated browsers and AI agents that scout, click, and probe real apps at scale.</span></div>
+      <div class="stat"><b>Source-inspection agents</b><span>Agents that read HTML, JS bundles, and dependencies to map your stack.</span></div>
+      <div class="stat"><b>Credential testers</b><span>Agents that try leaked or guessed credentials against every endpoint they find.</span></div>
+      <div class="stat"><b>WAF blind spots</b><span>Signature-based WAFs miss fresh agent behavior; Shield feeds your WAF the IPs that took the bait.</span></div>
+    </div>
+
+    <h3>How the deception layer works</h3>
+    <div class="flow">
+      <div class="f"><span class="n">1</span><b>Lure</b><span>Decoy leads only a probing agent goes looking for.</span></div>
+      <div class="f"><span class="n">2</span><b>Misdirect</b><span>Synthetic files and dependencies, so it maps an app that is not yours.</span></div>
+      <div class="f"><span class="n">3</span><b>Trap</b><span>An isolated decoy session, walled off from your real users.</span></div>
+      <div class="f"><span class="n">4</span><b>Block</b><span>Use a decoy credential and Shield blocks it. WAF-connected, a followed lead blocks its IP.</span></div>
+    </div>
+
+    <h3>One site, three visits</h3>
+    <div class="card">
+      <table>
+        <tr><th>Visitor</th><th>What happens</th><th>Where its steps go</th></tr>
+        <tr><td>A person</td><td>Loads the page normally, never touches a decoy.</td><td>Your app, as intended</td></tr>
+        <tr><td>An agent</td><td>Follows a decoy lead, explores the decoy session.</td><td>In decoys</td></tr>
+        <tr><td>An agent with a credential</td><td>Tries a decoy credential.</td><td>Blocked, and your WAF knows the IP</td></tr>
+      </table>
+      <p style="margin:8px 0 0">This is the illustration on the cyber page, and it is honest about its limits: a capable agent can ignore decoys, and no guaranteed slowdown is claimed.</p>
+    </div>
+
+    <h3>The rollout: Watch first, protect later</h3>
+    <div class="step"><b>1 · Watch</b><br>Start here. One line, about two minutes. See which AI agents scout your app. Nothing is blocked or diverted. No page load depends on us, no DNS, release, or script swap.</div>
+    <div class="step"><b>2 · Decoys at your edge</b><br>Your CDN or edge. Decoys live on paths real users never request. Your bundle stays on your hosting.</div>
+    <div class="step"><b>3 · Full protection</b><br>Advanced. Script swap: serve your bundle through Shield. Your pages then depend on it, and the decoy layer is complete.</div>
+
+    <h3>What Activity records, and what it cannot</h3>
+    <div class="card">
+      <ul>
+        <li>Highlighted results are what Activity records: visits that engaged with decoys.</li>
+        <li>Some automated browsers produce a reviewable signal. Stealth or non-browser agents may produce none.</li>
+        <li>A hint alone never blocks or diverts a request. Blocking happens on decoy credential use, or on a followed lead once your WAF is connected.</li>
+        <li>Source-inspection agents may investigate synthetic files and dependencies. A capable agent can ignore them; no guaranteed slowdown is claimed.</li>
+      </ul>
+    </div>
+
+    <h3>Where it lives</h3>
+    <div class="twocol">
+      <div class="card">
+        <b>In the console</b>
+        <p style="margin:6px 0 0">The Shield section is at <code>/console/shield</code> in the OrcaRouter console. That is the URL reps should send and demo from. Console access requires a workspace login, so in a live demo sign in first and land on the Shield tab.</p>
+      </div>
+      <div class="card">
+        <b>On the plan</b>
+        <p style="margin:6px 0 0">Included on eligible Team and Enterprise plans, with a free trial where offered. Team is $499/mo on the live pricing page. It is a plan feature, not a token meter: quote the pricing page, never a number from memory.</p>
+      </div>
+    </div>
+
+    <h3>How it fits the stack</h3>
+    <div class="card">
+      <p style="margin:0"><b>Defend at the gateway and on your site.</b> That is the framing from the security solutions page, and it is the positioning reps should hold:</p>
+      <ul>
+        <li><b>Guardrails</b> screen the text in prompts and responses (PII, secrets, jailbreaks).</li>
+        <li><b>Agent Firewall</b> governs the actions an agent takes (tool calls, MCP dispatch, egress).</li>
+        <li><b>Shield</b> defends the website itself against probing and attacking agents, at the edge, with deception.</li>
+        <li>Same console, same workspace, same zero-markup story. One vendor for the blue team, on the gateway and on the site.</li>
+      </ul>
+    </div>
+
+    <h3>Sales angles</h3>
+    <div class="card">
+      <ul>
+        <li><b>CISO / AppSec:</b> the conversation is attack agents, not malware. Their WAF is signature-based and does not know a fresh probing agent from a user. Shield makes the attacker's own behavior the signal.</li>
+        <li><b>Blue team complete:</b> models for the red team, firewall plus guardrails plus Shield for the blue team, on one contract. OrcaCyber Zero/Ultra on the offensive side, Shield on the defensive side.</li>
+        <li><b>Low-friction entry:</b> Watch is one async tag and two minutes. Either they see scout traffic, which justifies decoys, or they do not, which is still proof for their security review. The experiment is cheap both ways.</li>
+        <li><b>WAF augmentation:</b> Shield is not a WAF replacement. It feeds the WAF: a followed lead blocks the IP at the edge. That is an integration story, not a rip-and-replace.</li>
+        <li><b>Zero-markup discipline:</b> Shield rides the plan you already quote. No per-token meter, no surprise line item.</li>
+      </ul>
+    </div>
+
+    <h3>Claim hygiene: what we can and cannot say</h3>
+    <div class="note">
+      The cyber page is explicit and reps must stay inside it. We can say Shield lures, misdirects, traps, and blocks. We cannot say it catches every agent: stealth or non-browser agents may produce no signal. A hint alone never blocks or diverts a request; blocking is tied to decoy credential use or a WAF-connected lead. Capable agents can ignore decoys, and no guaranteed slowdown is claimed. The three-visits illustration is an illustration, not a measurement. Say all of it in our own words: "we built", "we report", never "according to the manufacturer".
+    </div>
+
+    <h3>Objection scripts</h3>
+    <div class="obj"><b>"Deception sounds like a honeypot, and honeypots have a history of failing."</b><div class="ans">Fair, and different. Honeypots are usually manual, static, and isolated from your production edge. Shield is a productized deception layer with a watch-first rollout: stage one is one tag, nothing blocked, and you see the scout traffic on your own app before you commit to anything. Blocking only fires on decoy credential use or a WAF-connected lead. It is defensive tooling you can run incrementally, not a research project.</div></div>
+    <div class="obj"><b>"We already have a WAF."</b><div class="ans">Keep it. A WAF matches known attack patterns; it does not know what a fresh AI agent probing with new credentials looks like. Shield creates the events your WAF can act on: when an agent follows a decoy lead, Shield can block its IP at your edge through the WAF connection. Different layers: the Firewall governs what your own agents do, Shield governs what attacking agents do to your site.</div></div>
+    <div class="obj"><b>"A capable agent can just ignore the decoys."</b><div class="ans">True, and the honest version is part of our pitch: no guaranteed slowdown is claimed. The value is not that every agent is fooled. It is that probing agents that take the bait burn their steps in decoys instead of your real app, and using a decoy credential is a hard block signal plus an IP your WAF can drop. Watch first tells you whether your site is even being scouted.</div></div>
+    <div class="obj"><b>"We are not seeing attack agents today."</b><div class="ans">Then Watch answers the question in two minutes with one tag and nothing blocked. If scout traffic shows up, you have your reason to add decoys. If it does not, you have clean evidence for your security review that the site is not being probed. Either outcome is a win, and it costs almost nothing to run the experiment.</div></div>
+    <div class="obj"><b>"Another security tool to manage."</b><div class="ans">It is a section of the console you already pay for, at <code>/console/shield</code>, not a new vendor. Stage one is one async tag with no page-load dependency and no DNS or script swap. It wires into the WAF you already run instead of competing with it. The management cost is closer to flipping on a feature than adopting a product.</div></div>
+    <div class="obj"><b>"What about our real traffic and real users?"</b><div class="ans">Decoys sit on paths real users never request, with synthetic files and fabricated credentials. Real traffic is untouched and never diverted. Watch records highlighted results only; a hint alone never blocks or diverts a request. Your bundle stays on your hosting until you choose the script-swap tier, and even then the choice is yours.</div></div>
+
+    <h3>10-minute demo flow</h3>
+    <div class="card">
+      <ol>
+        <li><b>(2 min)</b> Open <code>/console/shield</code> on a test site. Show the Watch entry: one async tag, about two minutes, nothing blocked. Paste it in.</li>
+        <li><b>(2 min)</b> Drive an automated browser at the site. Show Activity recording the probe: a reviewable signal, clearly highlighted. Note the honesty rule: stealth agents may produce none.</li>
+        <li><b>(2 min)</b> Flip on stage two, decoys at the edge. Walk the decoy paths real users never request. Show the synthetic files and dependencies the agent would map.</li>
+        <li><b>(2 min)</b> Show the block: an agent tries a decoy credential, Shield blocks it. Connect the WAF and show the IP drop at the edge.</li>
+        <li><b>(2 min)</b> Recap the four verbs: Lure, Misdirect, Trap, Block. Close with the Watch-first ask: one tag, two minutes, and we will tell you what is already scouting your site.</li>
+      </ol>
+      <p style="margin:6px 0 0"><b>Demo cautions:</b> the console needs a workspace login, so sign in before the meeting starts. Use a test site, never a customer's production app. Do not demo stage three (script swap) as a default; it makes pages depend on Shield and is an explicit buyer choice.</p>
+    </div>
+  </div>
+</section>
+
+<section class="tab" id="tab-quiz">
+  <div class="wrap">
+    <h2>Shield check</h2>
+    <p class="lede">Seven questions. Answer, then hit Check. The result shows what to reread if you miss.</p>
+
+    <div class="quizq" id="q1"><p>1. What does Orca Shield do?</p>
+      <label><input type="radio" name="q1" value="a"> Scans prompts for PII and secrets before the model sees them.</label>
+      <label><input type="radio" name="q1" value="b"> Lures attack agents into decoys, feeds them synthetic files and credentials, and blocks the ones that bite.</label>
+      <label><input type="radio" name="q1" value="c"> Blocks known malware signatures at the edge, like a classic WAF.</label>
+      <div class="result" id="r1"></div></div>
+
+    <div class="quizq" id="q2"><p>2. Which plans include Shield?</p>
+      <label><input type="radio" name="q2" value="a"> Hacker free tier and Team.</label>
+      <label><input type="radio" name="q2" value="b"> Eligible Team and Enterprise plans, with a free trial where offered.</label>
+      <label><input type="radio" name="q2" value="c"> Enterprise only.</label>
+      <div class="result" id="r2"></div></div>
+
+    <div class="quizq" id="q3"><p>3. How long does Watch take to set up?</p>
+      <label><input type="radio" name="q3" value="a"> One async tag, about two minutes. No DNS, release, or script swap.</label>
+      <label><input type="radio" name="q3" value="b"> A full CDN migration, roughly half a day.</label>
+      <label><input type="radio" name="q3" value="c"> It requires the script-swap tier, a few hours.</label>
+      <div class="result" id="r3"></div></div>
+
+    <div class="quizq" id="q4"><p>4. What does Watch do?</p>
+      <label><input type="radio" name="q4" value="a"> Blocks every request it suspects is an agent.</label>
+      <label><input type="radio" name="q4" value="b"> Shows which AI agents scout your app. Nothing is blocked or diverted.</label>
+      <label><input type="radio" name="q4" value="c"> Serves all traffic through Shield immediately.</label>
+      <div class="result" id="r4"></div></div>
+
+    <div class="quizq" id="q5"><p>5. When does Shield block?</p>
+      <label><input type="radio" name="q5" value="a"> When a request looks slightly automated.</label>
+      <label><input type="radio" name="q5" value="b"> When an agent uses a decoy credential, or a WAF-connected followed lead blocks its IP.</label>
+      <label><input type="radio" name="q5" value="c"> When an agent sends any request from a datacenter IP.</label>
+      <div class="result" id="r5"></div></div>
+
+    <div class="quizq" id="q6"><p>6. Can a hint alone block or divert a request?</p>
+      <label><input type="radio" name="q6" value="a"> Yes, hints are enough to block.</label>
+      <label><input type="radio" name="q6" value="b"> No. A hint alone never blocks or diverts a request.</label>
+      <label><input type="radio" name="q6" value="c"> Only in full-protection mode.</label>
+      <div class="result" id="r6"></div></div>
+
+    <div class="quizq" id="q7"><p>7. What is the honest claim about capable agents and decoys?</p>
+      <label><input type="radio" name="q7" value="a"> Decoys slow every agent by a guaranteed 40%.</label>
+      <label><input type="radio" name="q7" value="b"> A capable agent can ignore decoys; no guaranteed slowdown is claimed.</label>
+      <label><input type="radio" name="q7" value="c"> Only stealth agents can ignore decoys.</label>
+      <div class="result" id="r7"></div></div>
+
+    <div style="margin-top:14px">
+      <button onclick="shieldQuizCheck()" style="background:#111;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:15px;font-weight:600;cursor:pointer">Check answers</button>
+      <button onclick="shieldQuizReset()" style="background:none;border:1px solid #ddd;border-radius:8px;padding:10px 20px;font-size:15px;cursor:pointer;margin-left:8px">Reset</button>
+    </div>
+    <div class="card" id="shieldScore" style="display:none"><b>Score:</b> <span id="shieldScoreNum"></span></div>
+  </div>
+</section>
+
+<section class="tab" id="tab-sources">
+  <div class="wrap">
+    <h2>Sources</h2>
+    <p class="lede">Every number and claim on this page traces to one of these. Re-verify before customer calls; prices and model IDs move.</p>
+    <div class="card">
+      <ul>
+        <li>OrcaRouter Cyber page, Shield section: <a href="https://www.orcarouter.ai/cyber">orcarouter.ai/cyber</a></li>
+        <li>Shield console section: <a href="https://www.orcarouter.ai/console/shield">orcarouter.ai/console/shield</a></li>
+        <li>Homepage, Team plan listing ("Shield web defense for every site"): <a href="https://www.orcarouter.ai/">orcarouter.ai</a></li>
+        <li>Security &amp; Compliance solutions page (Shield under "Defend at the gateway and on your site"): <a href="https://www.orcarouter.ai/solutions/for/security">orcarouter.ai/solutions/for/security</a></li>
+        <li>Models catalog (OrcaC2 1.0, Claude Fable 5.2, Gemini 4 Carbon, Kimi K3.1 Pro, MiniMax M3.1 Flash): <a href="https://www.orcarouter.ai/models">orcarouter.ai/models</a></li>
+        <li>Blog, Nov 10-17 (GPT-6.2 Sol / Astra Pro, Gemini 4 Carbon and Hydrogen, MiniMax-H3-Image): <a href="https://www.orcarouter.ai/blog">orcarouter.ai/blog</a></li>
+        <li>X: OrcaC2 1.0 and OrcaCyber K3.1 Pro Abliterated announcements: <a href="https://x.com/OrcaRouter">@OrcaRouter</a>, <a href="https://x.com/OrcaCyberHQ">@OrcaCyberHQ</a></li>
+        <li>FlashLabs release notes, Week 44 (Nov 8, 2026), Xiaqiang Li PDF: "The New GTM Group Nov 16, 2026"</li>
+        <li>Messaging standard, coaching board, personas, claim hygiene: <a href="https://jaccobtruax-jpg.github.io/orcarouter-enablement/">orcarouter-enablement hub</a></li>
+        <li>Guardrails vs Firewall vs Shield composition: <a href="https://docs.orcarouter.ai/security/guardrails/overview">docs.orcarouter.ai guardrails overview</a>, <a href="https://docs.orcarouter.ai/features/firewall">firewall docs</a></li>
+      </ul>
+      <p style="margin:10px 0 0;color:#555;font-size:13.5px">Benchmarks labeled "ours" are vendor-reported, not independent audits. Pricing is live-page truth; quote the live page.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Orca Shield enablement session · Nov 19, 2026 · Built for the OrcaRouter sales team. Single-file page, no dependencies. Build date badge at the top is the deploy check.
+  </div>
+</footer>
+
+<script>
+// Unique names only: showShieldTab, shieldQuizCheck, shieldQuizReset.
+// The hub's original script owns showSection/showTopTab; nothing here collides.
+var shieldTabs = ['agenda','messaging','updates','shield','quiz','sources'];
+function showShieldTab(id) {
+  if (shieldTabs.indexOf(id) === -1) return;
+  for (var i = 0; i < shieldTabs.length; i++) {
+    var t = shieldTabs[i];
+    var sec = document.getElementById('tab-' + t);
+    var nav = document.getElementById('nav-' + t);
+    if (sec) { if (t === id) { sec.classList.add('active'); } else { sec.classList.remove('active'); } }
+    if (nav) { if (t === id) { nav.classList.add('active'); } else { nav.classList.remove('active'); } }
+  }
+  window.scrollTo(0, 0);
+}
+var shieldAnswers = { q1:'b', q2:'b', q3:'a', q4:'b', q5:'b', q6:'b', q7:'b' };
+var shieldHints = {
+  q1: 'Reread "What Shield is". Guardrails handle PII and secrets; that is a different layer.',
+  q2: 'Reread "Where it lives". It is a plan feature on eligible Team and Enterprise.',
+  q3: 'Reread "The rollout". Watch is one tag, about two minutes, no swap.',
+  q4: 'Reread "The rollout", step 1. Watch sees; it does not block or divert.',
+  q5: 'Reread "What Activity records". Blocking is tied to decoy credentials and WAF-connected leads.',
+  q6: 'Reread "What Activity records". A hint alone never blocks or diverts a request.',
+  q7: 'Reread "Claim hygiene". Capable agents can ignore decoys; no guaranteed slowdown is claimed.'
+};
+function shieldQuizCheck() {
+  var score = 0;
+  var keys = Object.keys(shieldAnswers);
+  for (var i = 0; i < keys.length; i++) {
+    var q = keys[i];
+    var el = document.querySelector('input[name="' + q + '"]:checked');
+    var res = document.getElementById('r' + q.slice(1));
+    if (el && el.value === shieldAnswers[q]) {
+      score++;
+      if (res) { res.className = 'result ok'; res.textContent = 'Correct.'; }
+    } else {
+      if (res) { res.className = 'result no'; res.textContent = shieldHints[q]; }
+    }
+  }
+  var scoreBox = document.getElementById('shieldScore');
+  var scoreNum = document.getElementById('shieldScoreNum');
+  if (scoreBox && scoreNum) {
+    scoreBox.style.display = 'block';
+    scoreNum.textContent = score + ' / 7';
+    if (score === 7) { scoreNum.textContent += ' - clean. You can sell Shield today.'; }
+    else if (score >= 5) { scoreNum.textContent += ' - solid, reread the missed hints above.'; }
+    else { scoreNum.textContent += ' - reread the Shield deep dive, then retake.'; }
+  }
+}
+function shieldQuizReset() {
+  var keys = Object.keys(shieldAnswers);
+  for (var i = 0; i < keys.length; i++) {
+    var q = keys[i];
+    var els = document.querySelectorAll('input[name="' + q + '"]');
+    for (var j = 0; j < els.length; j++) { els[j].checked = false; }
+    var res = document.getElementById('r' + q.slice(1));
+    if (res) { res.className = 'result'; res.textContent = ''; }
+  }
+  var scoreBox = document.getElementById('shieldScore');
+  if (scoreBox) { scoreBox.style.display = 'none'; }
+}
+</script>
+
+</body>
+</html>
